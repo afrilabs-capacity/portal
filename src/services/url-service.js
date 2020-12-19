@@ -6,9 +6,9 @@ const urlService=()=>{
     // }
 
     return {
-        baseUrl:"http://afrilabs-capacity.com/api/v1/",
-        publicUrl:"http://afrilabs-capacity.com/public",
-        authUrl:"http://afrilabs-capacity.com/api/v1/auth/"
+        baseUrl:"https://afrilabs-capacity.com/api/v1/",
+        publicUrl:"https://afrilabs-capacity.com/public",
+        authUrl:"https://afrilabs-capacity.com/api/v1/auth/"
     }
 
     

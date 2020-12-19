@@ -76,7 +76,7 @@ function App() {
 
   return (
   <AlertProvider template={AlertTemplate} {...options}>
-    <Router>
+    <Router >
         <React.Suspense fallback={loading}>
           <Switch>
             <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
