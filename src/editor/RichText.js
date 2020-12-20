@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import ArticleProvider from "../context/ArticleContext"
 
 const RichText =({actionType})=> {
-  const {setSelectedImageGlobal,selectedImageGlobal,currentArticle,editMode,article,updateArticle,modal,setModal}=useContext(ArticleProvider.Context)
+  const {setSelectedImageGlobal,selectedImageGlobal,currentArticle,editMode,article,updateArticle,modal,setModal,setFeaturedFor}=useContext(ArticleProvider.Context)
 
  let key="xxx"
 
@@ -75,6 +75,7 @@ const [myEditor,setMyEditor]=useState(null)
           onAction:()=> {
             setModal(true)
             setMyEditor(editor)
+            setFeaturedFor("")
             //
             }
         });
