@@ -12,7 +12,7 @@ const [myEditor,setMyEditor]=useState(null)
 
 
  useEffect(()=>{
-  myEditor!==null & selectedImageGlobal!=="" && myEditor.insertContent('<img alt="Smiley face" class="mce-responsive" src="' + selectedImageGlobal + '"/>')
+  myEditor!==null & selectedImageGlobal!=="" && myEditor.insertContent('<img alt="article image" class="mce-responsive" src="' + selectedImageGlobal + '"/>')
   //alert(myEditor)
  
  },

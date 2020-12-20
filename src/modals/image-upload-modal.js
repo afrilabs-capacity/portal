@@ -36,6 +36,15 @@ const API_URL = urlService().baseUrl;
   }
     
 
+const initialSelectedImage={
+   image:null,
+   id:null,
+   fileType:null,
+   fileName:null,
+   fileSize:null,
+   fileUploadedOn:null
+}  
+
 
 const ModalMe=({showToast})=>{
 
@@ -46,13 +55,7 @@ const ModalMe=({showToast})=>{
   
 
   const [gallery,updateGallery]=useState([])
-
-  const [selectedImage,setSelectedImage]=useState("")
-  const [selectedImageId,setSelectedImageId]=useState("")
-  const [fileType,setFileType]=useState("")
-  const [fileName,setFileName]=useState("")
-  const [fileSize,setFileSize]=useState("")
-  const [fileDimension,setFileDimension]=useState("")
+  const [selectedImage,setSelectedImage]=useState(initialSelectedImage)
   const [fileUploadedOn,setFileUploadedOn]=useState("")
   const [pagination,setPagination] = useState({});
   const [hasMore,setHasMore] = useState(false);
@@ -73,16 +76,6 @@ useEffect(()=>{
   const uploadBt=document.getElementById("modal-upload-bt")
   const uploadInput=document.getElementById("modal-upload-input")
   uploadBt.addEventListener("click",(e)=>triggerSelectInput(e,uploadInput))
-  // document.addEventListener("click",(e)=>{ 
-  //   if (e.target.tagName == 'A' && e.target.classList.contains("acpb_featured_delete")) {
-  //     e.preventDefault(); 
-  //     deletePhoto()
-  //     //setSelectedImageEn("")
-  //     //updateArticle("featured_en",null)
-  //   }
-  // })
-  //console.log("gallery from useEffect",gallery)
-
    fetchGallery()
 },[])
 
@@ -99,15 +92,27 @@ if(pagination.next_page_url && pagination.next_page_url!==null){
 },[pagination])
 
 useEffect(()=>{
-  selectedImageIdv=selectedImageId
-  },[selectedImageId])
+  selectedImageIdv=selectedImage.id
+  },[selectedImage.id])
 
- 
+  const updateSelectedImage=(data)=> 
+  {
+
+    const  newSelectedImage={
+     image:PUBLIC_URL+data.img_big,
+     id:data.id,
+     fileType:data.file_type,
+     fileName:data.file_original_name,
+     fileSize:data.file_size,
+     fileUploadedOn:data.created_at
+
+     }
+   setSelectedImage(newSelectedImage)  
+  }
 
  const fetchGallery=async=>{
   updateGallery([])
-  setSelectedImage("")
-  setSelectedImageId("")
+  setSelectedImage(initialSelectedImage)
   axios.request( {
     method: "get", 
     url: API_URL+"photo/all", 
@@ -139,11 +144,11 @@ useEffect(()=>{
   //updateGallery([])
   setLoginAction(initialLoginAction)
 
-   axios.get(API_URL+"photo/delete/"+selectedImageId,{headers: authHeader() }).then (response => {
+   axios.get(API_URL+"photo/delete/"+selectedImage.id,{headers: authHeader() }).then (response => {
  //fetchGallery()
- const newList = gallery.filter((item) => item.id !== selectedImageId);
+ const newList = gallery.filter((item) => item.id !== selectedImage.id);
  updateGallery(newList);
- setSelectedImage("")
+ setSelectedImage(initialSelectedImage)
 
  console.log('delete image response',response)
   }).catch(error => {
@@ -157,7 +162,7 @@ useEffect(()=>{
             alert.show("Token error",{type:'notice'})
             setAuthModal(true)
             setLoginAction(prevArticle=>{
-              return {...prevArticle,func:deletePhoto,params:selectedImageId}
+              return {...prevArticle,func:deletePhoto,params:selectedImage.id}
             })
             
           break;
@@ -261,29 +266,9 @@ return;
 
 
     }).then (response => {
-      updateGallery([])
-      //setHasMore(true)
-        // updateGallery(prevGallery=>[
-        //   ...prevGallery,...response.data.data.data.data
-        // ])
+      updateGallery([])   
 
-        // setPagination(prevArticle=>{
-        //   return {...prevArticle,...response.data.data.data}
-        // })
-        //alert.show("Success",{type: 'success'})
-        //console.log("Adding new image",response.data.data.data)
-        //  updateGallery(prevGallery=>[
-        //   ...prevGallery,response.data.data.data
-        // ])
-        //fetchGallery()
-        
-        let imageBig=PUBLIC_URL+response.data.data.data.img_big
-        setSelectedImage(imageBig)
-        setSelectedImageId(response.data.data.data.id)
-        setFileType(response.data.data.data.file_type)
-        setFileName(response.data.data.data.file_original_name)
-        setFileSize(response.data.data.data.file_size)
-        setFileUploadedOn(response.data.data.data.created_at)
+        updateSelectedImage(response.data.data.data)
        updateGallery(prevGallery=> [response.data.data.data,...gallery])
 
         setPagination(response.data.data.pagination)
@@ -374,14 +359,8 @@ return;
         //alert("check")
           return (
           <div className="col-md-4" style={{padding:"1em",cursor:"pointer"}} key={k}>
-              <img src={imgSmall} className={'img-thumbnail'} onClick={() => {
-        //let imageSource=document.getElementById("modal-selected-image").src.value=val
-                setSelectedImage(imageBig)
-                setSelectedImageId(val.id)
-                setFileType(val.file_type)
-                setFileName(val.file_original_name)
-                setFileSize(val.file_size)
-                setFileUploadedOn(val.created_at)
+              <img src={imgSmall} className={ selectedImage.id!==null && selectedImage.id==val.id ? 'img-thumbnail border border-primary':'img-thumbnail'} onClick={() => {
+                updateSelectedImage(val)
               }} />
           </div>
           )
@@ -421,16 +400,17 @@ return;
 
 
               <CCol md="4">
-              <img  className={'img-fluid'} id="modal-selected-image" src={selectedImage!==""?selectedImage:""} />
+              <img  className={'img-fluid'} id="modal-selected-image" src={selectedImage.image!==null?selectedImage.image:""} />
 
-              {selectedImage!=="" && <p align="center" id="acpb_ft_rm_fr"><a href="" style={Styles.link} id="acpb_del_ft" className="acpb_featured_delete" style={{color:"red",textDecoration:"underline"}} onClick={(e)=>{ e.preventDefault(); deletePhoto()} }>delete</a></p>} 
+              {selectedImage.image!==null && <p align="center" id="acpb_ft_rm_fr"><a href="" style={Styles.link} id="acpb_del_ft" className="acpb_featured_delete" style={{color:"red",textDecoration:"underline"}} onClick={(e)=>{ e.preventDefault(); deletePhoto()} }>delete</a></p>} 
 
-              {selectedImage!=="" && 
+              {selectedImage.image!==null && 
               <>
-              <p><b>File name:</b> {fileName}</p>
-              <p><b>File type:</b> {fileType}</p>
-              <p><b>File size:</b> {fileSize}kb</p>
-              <p><b>Uploaded on:</b> {fileUploadedOn}</p>
+              <p><b>File name:</b> {selectedImage.fileName}</p>
+              <p><b>File type:</b> {selectedImage.fileType}</p>
+              <p><b>File size:</b> {selectedImage.fileSize}kb</p>
+              <p><b>Uploaded on:</b> {selectedImage.fileUploadedOn}</p>
+              <p><b>Uploaded on:</b> {selectedImage.id}</p>
               
               </>}
               </CCol>
@@ -471,18 +451,18 @@ return;
               //console.log("selected Image",selectedImage)
               //console.log("Featured For",featuredFor)
               if(featuredFor=="acpb_en_ft"){
-                updateArticle("featured_en",selectedImage)
+                updateArticle("featured_en",selectedImage.image)
                 setSelectedImageEn(selectedImage)
               }else{
-                updateArticle("featured_fr",selectedImage)
-                setSelectedImageFr(selectedImage)
+                updateArticle("featured_fr",selectedImage.image)
+                setSelectedImageFr(selectedImage.image)
               }
               
                
             }else{
               //setting featured image
               setModal(prev=>!prev)
-              selectedImage!=="" && setSelectedImageGlobal(selectedImage)
+              selectedImage.id!==null && setSelectedImageGlobal(selectedImage.image)
 
             }
             

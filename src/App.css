@@ -78,4 +78,8 @@ display: none;
     background:#39f; 
   }   
 
+  .border-primary{
+    border-width: 30px;
+  }
+
   

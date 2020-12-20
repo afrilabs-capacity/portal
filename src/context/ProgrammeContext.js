@@ -1,6 +1,4 @@
 import React, { createContext, useState,useEffect} from "react";
-import { useHistory,useLocation,useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import axios from "axios"
 import urlService from "../services/url-service";
 

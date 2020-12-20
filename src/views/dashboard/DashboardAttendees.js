@@ -9,7 +9,6 @@ import {
 } from '@coreui/react'
 import AttendeeProvider from "../../context/AttendeeContext"
 import Paginations from "../../pagination/pagination"
-import SearchInput from "../../inputs/search-input"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 
@@ -37,11 +36,11 @@ const DashboardAttendees = () => {
 
 const {id} =useParams()
 
-const {fetching,fetchingFailMsg,setCurrentPage,fetchAttendeesByProgrammeIdApi,pagination,attendees}=useContext(AttendeeProvider.Context)
+const {fetching,fetchingFailMsg,fetchAttendeesByProgrammeIdApi,pagination,attendees}=useContext(AttendeeProvider.Context)
 
 useEffect(()=>{
 fetchAttendeesByProgrammeIdApi(id)
-},[])
+},[id])
 
 
   return (

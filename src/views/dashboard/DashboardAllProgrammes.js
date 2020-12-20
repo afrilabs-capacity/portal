@@ -31,7 +31,7 @@ const styles={
 
 const DashboardProgrammes = () => {
 
-const {fetching,fetchingFailMsg,setCurrentPage,fetchProgrammesApi,pagination,programmes}=useContext(ProgrammeProvider.Context)
+const {fetching,fetchingFailMsg,fetchProgrammesApi,pagination,programmes}=useContext(ProgrammeProvider.Context)
 
 useEffect(()=>{
 fetchProgrammesApi()

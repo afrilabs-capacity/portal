@@ -1,6 +1,5 @@
 import React, { createContext, useState,useEffect,useContext} from "react";
-import { useHistory,useLocation,useParams } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useHistory} from "react-router-dom";
 import axios from "axios"
 import { useAlert } from 'react-alert'
 import ToastMe from "../alerts/toaster"

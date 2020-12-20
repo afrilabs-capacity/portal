@@ -1,6 +1,4 @@
 import React, { createContext, useState,useEffect} from "react";
-import { useHistory,useLocation,useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import axios from "axios"
 
 import urlService from "../services/url-service";
@@ -9,34 +7,7 @@ const API_URL = urlService().baseUrl;
 
 const Context = createContext({});
 
-const initialArticle={
-    id:null,
-    title_en: "",
-    body_en: null,
-    featured_en:null,
-    title_fr: "",
-    body_fr: null,
-    featured_fr:null,
-    status:"draft",
-    category:"",
-    created_at:null,
-    updated_at:null
-}
 
-
-const initialEditArticle={
- id:null,
- title_en: "",
- body_en: null,
- featured_en:null,
- title_fr: "",
- body_fr: null,
- featured_fr:null,
- status:"draft",
- category:"",
- created_at:null,
- updated_at:null
-}
 
 
 

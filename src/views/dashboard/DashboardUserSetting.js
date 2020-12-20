@@ -17,15 +17,7 @@ import LoginModal from '../../modals/login-modal'
 
 
 
-const getBadge = status => {
-  switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
-  }
-}
+
 
 const DashboardUserSetting= () => {
 

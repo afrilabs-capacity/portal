@@ -1,18 +1,11 @@
 import React, {useContext,useEffect } from 'react'
 import {
-  CBadge,
-  CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CCallout
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import ArticleProvider from "../../context/ArticleContext"
 import Paginations from "../../pagination/pagination"
 import SearchInput from "../../inputs/search-input"
@@ -20,7 +13,6 @@ import LoginModal from '../../modals/login-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash} from "@fortawesome/free-solid-svg-icons";
 
-import MainChartExample from '../charts/MainChartExample.js'
 
 const styles={
     noBorder:{
@@ -40,7 +32,7 @@ const styles={
 
 const Dashboard = () => {
 
-const {fetching,fetchingFailMsg,setCurrentPage,articles,fetchArticlesApi,pagination,fetchArticleByIdApi,resetEditArticle,resetArticle,setEditMode,setArticle,setCurrentArticle,editMode,selectedImageEn,selectedImageFr,validateArticle,toast,modal,setModal,setToast,article,updateArticle,deleteArticleApi}=useContext(ArticleProvider.Context)
+const {fetching,fetchingFailMsg,setCurrentPage,articles,fetchArticlesApi,pagination,deleteArticleApi}=useContext(ArticleProvider.Context)
 
 useEffect(()=>{
 fetchArticlesApi()
