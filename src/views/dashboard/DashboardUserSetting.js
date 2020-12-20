@@ -1,21 +1,16 @@
-import React, { useState, useEffect,useContext } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import React, { useEffect,useContext } from 'react'
+
 import {
-  CBadge,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
-  CDataTable,
   CRow,
   CFormGroup,
   CInput,
   CLabel,
-  CPagination,
-  CButton
 } from '@coreui/react'
 import UserProvider from "../../context/UserContext"
-import UserRole from "../../inputs/user-role"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import LoginModal from '../../modals/login-modal'
@@ -35,7 +30,7 @@ const getBadge = status => {
 const DashboardUserSetting= () => {
 
 
-    const {updatePasswordUserApi,toast,fetchUsersApi,users,setUser,addUserApi,errors,deleteUserApi,apiAction,fetchingFailMsg}=useContext(UserProvider.Context)
+    const {updatePasswordUserApi,errors,apiAction}=useContext(UserProvider.Context)
 
  
 

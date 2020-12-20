@@ -1,5 +1,5 @@
-import React, { useState, useEffect,useContext } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import React, { useEffect,useContext } from 'react'
+
 import {
   CBadge,
   CCard,

@@ -29,7 +29,6 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
 const DashboardAddPost = React.lazy(() => import('./views/dashboard/DashboardAddPost'));
 const DashboardAllPost = React.lazy(() => import('./views/dashboard/DashboardAllPost'));
 const DashboardEditPost = React.lazy(() => import('./views/dashboard/DashboardEditPost'));
-const DashboardAddPostTest = React.lazy(() => import('./views/dashboard/DashboardAddPostTest'));
 const DashboardAllProgrammes = React.lazy(() => import('./views/dashboard/DashboardAllProgrammes'));
 const DashboardAttendees = React.lazy(() => import('./views/dashboard/DashboardAttendees'));
 const DashboardAttendeesUser = React.lazy(() => import('./views/dashboard/DashboardAttendeesUser'));

@@ -1,16 +1,10 @@
-import React, { lazy,useContext,useEffect } from 'react'
+import React, { useContext,useEffect } from 'react'
 import {
-  CBadge,
-  CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CCallout
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import ProgrammeProvider from "../../context/ProgrammeContext"

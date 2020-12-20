@@ -11,7 +11,7 @@ import {
 
 
 const ToastMe=({showToast,context})=>{
-    const {toast,toastType,errors,setToast}=useContext(context)
+    const {toastType,errors,setToast}=useContext(context)
 
    
 

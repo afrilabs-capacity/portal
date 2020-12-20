@@ -10,6 +10,8 @@ import {
 import CIcon from "@coreui/icons-react";
 import AuthService from "../services/auth.service";
 import { Redirect,useHistory } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPowerOff} from "@fortawesome/free-solid-svg-icons";
 
 const TheHeaderDropdown = () => {
 
@@ -20,9 +22,9 @@ const history = useHistory()
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
           <CImg
-            src={"/avatars/6.jpg"}
+            src={"https://drive.google.com/uc?export=view&id=1g35n2i-OR_aXScfhNIb7R_ErlzU7YZbx"}
             className="c-avatar-img"
-            alt="admin@bootstrapmaster.com"
+            alt="avatar"
           />
         </div>
       </CDropdownToggle>
@@ -88,11 +90,8 @@ const history = useHistory()
               AuthService.logout();
               history.replace('/')
             }}>
-          <CIcon
-            name="cil-lock-locked"
-            className="mfe-2"
-          />
-          Sign Out
+            <FontAwesomeIcon   icon={faPowerOff} />
+            &nbsp;&nbsp; Sign Out
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

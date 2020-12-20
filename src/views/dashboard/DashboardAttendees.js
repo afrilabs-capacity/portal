@@ -1,29 +1,20 @@
-import React, { lazy,useContext,useEffect } from 'react'
+import React, { useContext,useEffect } from 'react'
 import {
-  CBadge,
-  CButton,
-  CButtonGroup,
+ 
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CCallout
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import ProgrammeProvider from "../../context/ProgrammeContext"
 import AttendeeProvider from "../../context/AttendeeContext"
 import Paginations from "../../pagination/pagination"
 import SearchInput from "../../inputs/search-input"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
-import MainChartExample from '../charts/MainChartExample.js'
 
-import {useParams,useLocation} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import MyExcelExport from '../../exports/Excel'
 
 const styles={
@@ -64,7 +55,7 @@ fetchAttendeesByProgrammeIdApi(id)
               </CCol>
 
               <CCol>
-             <SearchInput context={AttendeeProvider.Context}/>
+             {/* <SearchInput context={AttendeeProvider.Context}/> */}
               </CCol>
               </CRow>
              

@@ -10,7 +10,6 @@ import {
     CProgress
   } from '@coreui/react'
   import ArticleProvider from "../context/ArticleContext"
-  import PgCatProvider from "../context/PgCatContext"
   import GalleryProvider from "../context/GalleryContext";
   import InfiniteScroll from 'react-infinite-scroll-component';
   import axios from "axios";
@@ -446,7 +445,7 @@ return;
               <input id="modal-upload-input" type="file"  hidden={true} onChange={(e)=>onChange(e)} />
             
                 
-                     <CButton id="modal-upload-bt" color="primary" size="md" block md="12">
+                     <CButton id="modal-upload-bt" color="primary" size="md" block md="12" disabled={uploading}>
                      { uploading ? <><span
                         className="spinner-grow spinner-grow-sm"
                         role="status"
