@@ -10,32 +10,37 @@ import {
 import "./scss/style.scss";
 import "./App.css";
 import AuthService from "./services/auth.service";
-import PgCatProvider from "./context/PgCatContext"
-import ArticleProvider from "./context/ArticleContext"
-import ProgrammeProvider from "./context/ProgrammeContext"
-import AttendeeProvider from "./context/AttendeeContext"
-import UserProvider from "./context/UserContext"
-import AuthProvider from "./context/AuthContext"
-import GalleryProvider from "./context/GalleryContext"
+import PgCatProvider from "./context/PgCatContext";
+import ArticleProvider from "./context/ArticleContext";
+import ProgrammeProvider from "./context/ProgrammeContext";
+import AttendeeProvider from "./context/AttendeeContext";
+import UserProvider from "./context/UserContext";
+import AuthProvider from "./context/AuthContext";
+import GalleryProvider from "./context/GalleryContext";
+import ActivityProvider from "./context/ActivityContext";
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faCoffee,faEye } from '@fortawesome/free-solid-svg-icons'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCheckSquare,
+  faCoffee,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { transitions, positions, Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
 // optional configuration
 const options = {
   // you can also just use 'bottom center'
   position: positions.TOP_CENTER,
   timeout: 5000,
-  offset: '70px',
+  offset: "70px",
   // you can also just use 'scale'
-  transition: transitions.SCALE
-}
+  transition: transitions.SCALE,
+};
 
-library.add(fab, faCheckSquare, faCoffee)
+library.add(fab, faCheckSquare, faCoffee);
 
 const loading = (
   <div className="pt-3 text-center">
@@ -60,14 +65,18 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       exact
       render={(props) => {
         //console.log('login props',props)
-        return (
-          localStorage.lac_user ?
-          (<Component {...props} />):(
-            <Redirect to={{ pathname: "/login", state: { from: props.location.pathname } }}  />
-          )
+        return localStorage.lac_user ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: props.location.pathname },
+            }}
+          />
         );
       }}
-            />
+    />
   );
 };
 
@@ -75,34 +84,55 @@ function App() {
   const UserContext = createContext();
 
   return (
-  <AlertProvider template={AlertTemplate} {...options}>
-    <Router >
+    <AlertProvider template={AlertTemplate} {...options}>
+      <Router>
         <React.Suspense fallback={loading}>
           <Switch>
-            <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
-            <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
-            <Route exact path="/404" name="Page 404" render={props => <Page404 {...props}/>} />
-            <Route exact path="/500" name="Page 500" render={props => <Page500 {...props}/>} />
-            
+            <Route
+              exact
+              path="/login"
+              name="Login Page"
+              render={(props) => <Login {...props} />}
+            />
+            <Route
+              exact
+              path="/register"
+              name="Register Page"
+              render={(props) => <Register {...props} />}
+            />
+            <Route
+              exact
+              path="/404"
+              name="Page 404"
+              render={(props) => <Page404 {...props} />}
+            />
+            <Route
+              exact
+              path="/500"
+              name="Page 500"
+              render={(props) => <Page500 {...props} />}
+            />
+
             <PgCatProvider.Provider>
-            <ArticleProvider.Provider>
-            <ProgrammeProvider.Provider>
-            <AttendeeProvider.Provider>
-            <UserProvider.Provider>
-              <AuthProvider.Provider>
-            <GalleryProvider.Provider>
-            <ProtectedRoute path="/" component={TheLayout} />
-            </GalleryProvider.Provider>
-            </AuthProvider.Provider>
-            </UserProvider.Provider>
-            </AttendeeProvider.Provider>
-            </ProgrammeProvider.Provider>
-            </ArticleProvider.Provider>
+              <ArticleProvider.Provider>
+                <ProgrammeProvider.Provider>
+                  <AttendeeProvider.Provider>
+                    <UserProvider.Provider>
+                      <AuthProvider.Provider>
+                        <GalleryProvider.Provider>
+                          <ActivityProvider.Provider>
+                            <ProtectedRoute path="/" component={TheLayout} />
+                          </ActivityProvider.Provider>
+                        </GalleryProvider.Provider>
+                      </AuthProvider.Provider>
+                    </UserProvider.Provider>
+                  </AttendeeProvider.Provider>
+                </ProgrammeProvider.Provider>
+              </ArticleProvider.Provider>
             </PgCatProvider.Provider>
-            
           </Switch>
         </React.Suspense>
-    </Router>
+      </Router>
     </AlertProvider>
   );
 
@@ -110,10 +140,9 @@ function App() {
   //   <Router>
   //     <React.Suspense fallback={loading}>
   //       <Switch>
-         
 
   //         <ProtectedRoute
-            
+
   //           path="/dashboard"
   //           name="Dashboard"
   //           component={(props)=><TheLayout {...props} />}

@@ -1,5 +1,5 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CHeader,
   CToggler,
@@ -9,36 +9,39 @@ import {
   CHeaderNavLink,
   CSubheader,
   CBreadcrumbRouter,
-  CLink
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CLink,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
 // routes config
-import routes from '../routes'
+import routes from "../routes";
 
-import { 
+import {
   TheHeaderDropdown,
   TheHeaderDropdownMssg,
   TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks
-}  from './index'
+  TheHeaderDropdownTasks,
+} from "./index";
 
-
-const user = JSON.parse(localStorage.getItem('lac_user')) 
+const user = JSON.parse(localStorage.getItem("lac_user"));
 
 const TheHeader = () => {
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector(state => state.sidebarShow)
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector((state) => state.sidebarShow);
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
-  }
+    const val = [true, "responsive"].includes(sidebarShow)
+      ? false
+      : "responsive";
+    dispatch({ type: "set", sidebarShow: val });
+  };
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
-  }
+    const val = [false, "responsive"].includes(sidebarShow)
+      ? true
+      : "responsive";
+    dispatch({ type: "set", sidebarShow: val });
+  };
 
   return (
     <CHeader withSubheader className="border-0 shadow-sm">
@@ -57,23 +60,23 @@ const TheHeader = () => {
       </CHeaderBrand> */}
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <CHeaderNavItem className="px-3" >
+        <CHeaderNavItem className="px-3">
           <CHeaderNavLink to="/dashboard">Home</CHeaderNavLink>
         </CHeaderNavItem>
-        
+
         <CHeaderNavItem className="px-3">
           <CHeaderNavLink to="/user/setting">Settings</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem  className="px-3">
-          Welcome back, <b>{  user    ? ` ${user.name.split(" ")[0]}` : "" }</b>
+        <CHeaderNavItem className="px-3">
+          Welcome back, <b>{user ? ` ${user.name}` : ""}</b>
         </CHeaderNavItem>
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdownNotif/>
-        <TheHeaderDropdownTasks/>
-        <TheHeaderDropdownMssg/>
-        <TheHeaderDropdown/>
+        <TheHeaderDropdownNotif />
+        <TheHeaderDropdownTasks />
+        <TheHeaderDropdownMssg />
+        <TheHeaderDropdown />
       </CHeaderNav>
 
       {/* <CSubheader className="px-3 justify-content-between border-0 border-bottom-0">
@@ -98,7 +101,7 @@ const TheHeader = () => {
           </div>
       </CSubheader> */}
     </CHeader>
-  )
-}
+  );
+};
 
-export default TheHeader
+export default TheHeader;

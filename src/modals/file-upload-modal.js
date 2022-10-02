@@ -16,6 +16,8 @@ import axios from "axios";
 import { useAlert } from "react-alert";
 import authHeader from "../services/auth-header";
 import urlService from "../services/url-service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const API_URL = urlService().baseUrl;
 
@@ -35,7 +37,7 @@ const Styles = {
   },
 };
 
-const initialSelectedImage = {
+const initialSelectedFile = {
   image: null,
   id: null,
   fileType: null,
@@ -44,30 +46,26 @@ const initialSelectedImage = {
   fileUploadedOn: null,
 };
 
-const ModalMe = ({ showToast }) => {
+const ModalMeFile = ({ openModal }) => {
   const {
-    initialLoginAction,
-    setLoginAction,
-    setAuthModal,
-    selectedImageGlobal,
-    setSelectedImageGlobal,
+    // initialLoginAction,
+    // setLoginAction,
+    // setAuthModal,
+    // selectedImageGlobal,
+    // setSelectedImageGlobal,
     updateArticle,
-    article,
-    setArticle,
-    featuredFor,
-    setSelectedImageEn,
-    setSelectedImageFr,
+    // featuredFor,
+    // setSelectedImageEn,
+    // setSelectedImageFr,
     modal,
     setModal,
   } = useContext(ArticleProvider.Context);
-  const { boy, uploadProgress, setUploadProgress } = useContext(
+  const { uploadProgress, setUploadProgress } = useContext(
     GalleryProvider.Context
   );
   const alert = useAlert();
-
-  const [gallery, updateGallery] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(initialSelectedImage);
-  const [fileUploadedOn, setFileUploadedOn] = useState("");
+  const [gallery, updateFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(initialSelectedFile);
   const [pagination, setPagination] = useState({});
   const [hasMore, setHasMore] = useState(false);
   const [successMsg, setSuccessMsg] = useState(null);
@@ -76,7 +74,7 @@ const ModalMe = ({ showToast }) => {
 
   let loadMore = false;
 
-  let selectedImageIdv = null;
+  //let selectedImageIdv = null;
 
   const triggerSelectInput = (e, input) => {
     e.preventDefault();
@@ -89,7 +87,7 @@ const ModalMe = ({ showToast }) => {
     uploadBt.addEventListener("click", (e) =>
       triggerSelectInput(e, uploadInput)
     );
-    fetchGallery();
+    fetchFiles();
   }, []);
 
   useEffect(() => {
@@ -102,10 +100,10 @@ const ModalMe = ({ showToast }) => {
   }, [pagination]);
 
   useEffect(() => {
-    selectedImageIdv = selectedImage.id;
-  }, [selectedImage.id]);
+    //selectedImageIdv = selectedImage.id;
+  }, [selectedFile.id]);
 
-  const updateSelectedImage = (data) => {
+  const updateSelectedFile = (data) => {
     const newSelectedImage = {
       image: PUBLIC_URL + data.img_big,
       id: data.id,
@@ -114,16 +112,16 @@ const ModalMe = ({ showToast }) => {
       fileSize: data.file_size,
       fileUploadedOn: data.created_at,
     };
-    setSelectedImage(newSelectedImage);
+    setSelectedFile(newSelectedImage);
   };
 
-  const fetchGallery = (async) => {
-    updateGallery([]);
-    setSelectedImage(initialSelectedImage);
+  const fetchFiles = (id) => {
+    updateFiles([]);
+    setSelectedFile(initialSelectedFile);
     axios
       .request({
         method: "get",
-        url: API_URL + "photo/all",
+        url: API_URL + "resources/" + id,
         // data: data,
         onUploadProgress: (p) => {
           setUploadProgress(
@@ -136,7 +134,7 @@ const ModalMe = ({ showToast }) => {
       .then((response) => {
         //console.log("response file name",response.data.data.data.data)
 
-        updateGallery((prevGallery) => [
+        updateFiles((prevGallery) => [
           ...prevGallery,
           ...response.data.data.data.data,
         ]);
@@ -149,19 +147,19 @@ const ModalMe = ({ showToast }) => {
       });
   };
 
-  const deletePhoto = () => {
+  const deleteFile = () => {
     //updateGallery([])
-    setLoginAction(initialLoginAction);
+    //setLoginAction(initialLoginAction);
 
     axios
-      .get(API_URL + "photo/delete/" + selectedImage.id, {
+      .get(API_URL + "resource/delete/" + selectedFile.id, {
         headers: authHeader(),
       })
       .then((response) => {
         //fetchGallery()
-        const newList = gallery.filter((item) => item.id !== selectedImage.id);
-        updateGallery(newList);
-        setSelectedImage(initialSelectedImage);
+        const newList = gallery.filter((item) => item.id !== selectedFile.id);
+        updateFiles(newList);
+        setSelectedFile(initialSelectedFile);
 
         console.log("delete image response", response);
       })
@@ -174,14 +172,14 @@ const ModalMe = ({ showToast }) => {
                 break;
               case 401:
                 alert.show("Token error", { type: "notice" });
-                setAuthModal(true);
-                setLoginAction((prevArticle) => {
-                  return {
-                    ...prevArticle,
-                    func: deletePhoto,
-                    params: selectedImage.id,
-                  };
-                });
+                //setAuthModal(true);
+                // setLoginAction((prevArticle) => {
+                //   return {
+                //     ...prevArticle,
+                //     func: deletePhoto,
+                //     params: selectedFile.id,
+                //   };
+                // });
 
                 break;
               default:
@@ -212,7 +210,7 @@ const ModalMe = ({ showToast }) => {
         .then((response) => {
           //console.log("response file name",response.data.data.data.data)
 
-          updateGallery((prevGallery) => [
+          updateFiles((prevGallery) => [
             ...prevGallery,
             ...response.data.data.data.data,
           ]);
@@ -231,17 +229,20 @@ const ModalMe = ({ showToast }) => {
     let file = null;
     file = e.target.files[0] || e.dataTransfer.files[0];
     e.target.value = "";
-    let allowed_mime_types = ["image/jpeg", "image/png"];
+    let allowed_mime_types = ["xls", "xlsx", "pdf", "doc", "docx"];
     let allowed_size_mb = 2;
-
-    if (allowed_mime_types.indexOf(file.type) == -1) {
+    // alert.show(file.type, {
+    //   type: "success",
+    //   position: "bottom center",
+    // });
+    if (allowed_mime_types.indexOf(file.type.toLowerCase()) !== -1) {
       //alert('Error : Incorrect file type');
       setSuccessMsg("Incorrect file type");
       //alert.show("Incorrect file type",{type: 'error',position:"top right",containerStyle:{zIndex: 4}})
       return;
     }
 
-    if (file.size > allowed_size_mb * 1024 * 1024) {
+    if (file.size > allowed_size_mb * 10024 * 10024) {
       //alert('Error : Exceeded size');
       setSuccessMsg("Size limit of 2mb Exceeded");
       //alert.show("Size limit of 1mb Exceeded",{type: 'error',position:"top right"})
@@ -249,6 +250,8 @@ const ModalMe = ({ showToast }) => {
     }
     //alert("on change for loading files")
     if (!file) return;
+
+    //alert("here we are");
 
     //
     setSuccessMsg(null);
@@ -268,7 +271,7 @@ const ModalMe = ({ showToast }) => {
     axios
       .request({
         method: "post",
-        url: API_URL + "photo/upload",
+        url: API_URL + "resource",
         data: data,
         onUploadProgress: (p) => {
           setUploadProgress(
@@ -279,13 +282,12 @@ const ModalMe = ({ showToast }) => {
         },
       })
       .then((response) => {
-        updateGallery([]);
-
-        updateSelectedImage(response.data.data.data);
-        updateGallery((prevGallery) => [response.data.data.data, ...gallery]);
+        updateFiles([]);
+        updateSelectedFile(response.data.data.data);
+        updateFiles((prevGallery) => [response.data.data.data, ...gallery]);
 
         setPagination(response.data.data.pagination);
-        console.log("Added new image", gallery);
+        //console.log("Added new resource", gallery);
         setUploading(false);
       })
       .catch((error) => {
@@ -324,14 +326,14 @@ const ModalMe = ({ showToast }) => {
     <>
       <CModal
         size="lg"
-        show={modal}
+        show={openModal}
         onClose={() => {
-          setModal(!modal);
+          setModal(!openModal);
           setSuccessMsg(null);
         }}
       >
         <CModalHeader closeButton>
-          <h3>Gallery</h3>
+          <h3>Files</h3>
         </CModalHeader>
         <CModalBody>
           <CRow>
@@ -368,25 +370,49 @@ const ModalMe = ({ showToast }) => {
                                 //alert("check")
                                 return (
                                   <div
-                                    className="col-md-4"
+                                    className="row"
                                     style={{
                                       padding: "1em",
                                       cursor: "pointer",
                                     }}
                                     key={k}
                                   >
-                                    <img
+                                    {/* <img
                                       src={imgSmall}
                                       className={
-                                        selectedImage.id !== null &&
-                                        selectedImage.id == val.id
+                                        selectedFile.id !== null &&
+                                        selectedFile.id == val.id
                                           ? "img-thumbnail border border-primary"
                                           : "img-thumbnail"
                                       }
                                       onClick={() => {
-                                        updateSelectedImage(val);
+                                        updateSelectedFile(val);
                                       }}
-                                    />
+                                    /> */}
+                                    <div className="col-md-3">
+                                      <img
+                                        width="40px"
+                                        src="https://afrilabs-capacity.com/images/file_icons/pdf.png"
+                                      />
+                                    </div>
+                                    <div className="col-md-9">
+                                      <div className="row">
+                                        <div className="col-md-8">
+                                          <p>Day 1 of 2020 AfHLW Series 2 </p>
+                                        </div>
+                                        <div className="col-md-4">
+                                          <span>
+                                            <FontAwesomeIcon
+                                              style={{
+                                                color: "red",
+                                                cursor: "pointer",
+                                              }}
+                                              icon={faTimes}
+                                            />
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
                                 );
                               })}
@@ -407,14 +433,14 @@ const ModalMe = ({ showToast }) => {
               {hasMore ? <b>(scroll down for more images)</b> : ""}
             </CCol>
 
-            <CCol md="4">
+            {/* <CCol md="4">
               <img
                 className={"img-fluid"}
                 id="modal-selected-image"
-                src={selectedImage.image !== null ? selectedImage.image : ""}
+                src={selectedFile.image !== null ? selectedFile.image : ""}
               />
 
-              {selectedImage.image !== null && (
+              {selectedFile.image !== null && (
                 <p align="center" id="acpb_ft_rm_fr">
                   <a
                     href=""
@@ -432,26 +458,26 @@ const ModalMe = ({ showToast }) => {
                 </p>
               )}
 
-              {selectedImage.image !== null && (
+              {selectedFile.image !== null && (
                 <>
                   <p>
-                    <b>File name:</b> {selectedImage.fileName}
+                    <b>File name:</b> {selectedFile.fileName}
                   </p>
                   <p>
-                    <b>File type:</b> {selectedImage.fileType}
+                    <b>File type:</b> {selectedFile.fileType}
                   </p>
                   <p>
-                    <b>File size:</b> {selectedImage.fileSize}kb
+                    <b>File size:</b> {selectedFile.fileSize}kb
                   </p>
                   <p>
-                    <b>Uploaded on:</b> {selectedImage.fileUploadedOn}
+                    <b>Uploaded on:</b> {selectedFile.fileUploadedOn}
                   </p>
                   <p>
-                    <b>Uploaded on:</b> {selectedImage.id}
+                    <b>Uploaded on:</b> {selectedFile.id}
                   </p>
                 </>
               )}
-            </CCol>
+            </CCol> */}
           </CRow>
           <CRow className="d-flex flex-row justify-content-center">
             {/* <CCol md="8">Left</CCol>
@@ -502,35 +528,13 @@ const ModalMe = ({ showToast }) => {
           </CRow>
         </CModalBody>
         <CModalFooter>
-          <CButton
-            color="primary"
-            onClick={() => {
-              if (featuredFor !== "") {
-                //setting featured image
-                setModal((prev) => !prev);
-                //console.log("selected Image",selectedImage)
-                //console.log("Featured For",featuredFor)
-                if (featuredFor == "acpb_en_ft") {
-                  updateArticle("featured_en", selectedImage.image);
-                  setSelectedImageEn(selectedImage);
-                } else {
-                  updateArticle("featured_fr", selectedImage.image);
-                  setSelectedImageFr(selectedImage.image);
-                }
-              } else {
-                //setting featured image
-                setModal((prev) => !prev);
-                selectedImage.id !== null &&
-                  setSelectedImageGlobal(selectedImage.image);
-              }
-            }}
-          >
+          <CButton color="primary" onClick={() => null}>
             OK
           </CButton>{" "}
           <CButton
             color="secondary"
             onClick={() => {
-              setModal(!modal);
+              setModal(!openModal);
               setSuccessMsg(null);
             }}
           >
@@ -542,4 +546,4 @@ const ModalMe = ({ showToast }) => {
   );
 };
 
-export default ModalMe;
+export default ModalMeFile;
